@@ -13,6 +13,18 @@ public class Village {
 		this.nom = nom;
 		villageois = new Gaulois[nbVillageoisMaximum];
 	}
+	
+	private static class Marche {
+		private Etal[] etals;
+		
+		public Marche(int nbEtals) {
+			this.etals = new Etal[nbEtals];
+		}
+		
+		void utiliserEtal(int indiceEtal, Gaulois vendeur, String produit, int nbProduit) {
+			
+		}
+	}
 
 	public String getNom() {
 		return nom;
