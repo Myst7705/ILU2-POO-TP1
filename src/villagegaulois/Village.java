@@ -13,16 +13,71 @@ public class Village {
 		this.nom = nom;
 		villageois = new Gaulois[nbVillageoisMaximum];
 	}
-	
+
 	private static class Marche {
 		private Etal[] etals;
-		
+
 		public Marche(int nbEtals) {
 			this.etals = new Etal[nbEtals];
 		}
+
+		private void utiliserEtal(int indiceEtal, Gaulois vendeur, String produit, int nbProduit) {
+			etals[indiceEtal].occuperEtal(vendeur, produit, nbProduit);
+		}
+
+		private int trouverEtalLibre() {
+			for (int i = 0; i < etals.length; i++) {
+				if (!etals[i].isEtalOccupe()) {
+					return i;
+				}
+			}
+			return -1;
+		}
+
+		private Etal[] trouverEtals(String produit) {
+			int tailleEtals = 0;
+			for (int i = 0; i < etals.length; i++) {
+				if (etals[i].contientProduit(produit)) {
+					tailleEtals++;
+				}
+			}
+
+			Etal[] etalsProduit = new Etal[tailleEtals];
+			int iEtalsProduit = 0;
+			for (int i = 0; i < etals.length; i++) {
+				if (etals[i].contientProduit(produit)) {
+					etalsProduit[iEtalsProduit] = etals[i];
+					iEtalsProduit++;
+				}
+			}
+
+			return etalsProduit;
+		}
 		
-		void utiliserEtal(int indiceEtal, Gaulois vendeur, String produit, int nbProduit) {
+		private Etal trouverVendeur(Gaulois gaulois) {
+			for (int i = 0; i < etals.length; i++) {
+				if ((gaulois.getNom()).equals(etals[i].getVendeur().getNom())){
+					return etals[i];
+				}
+			}
+			return null;
+		}
+		
+		private String afficherMarche() {
+			StringBuilder strMarche = new StringBuilder();
+			int nbEtalOccupes = 0;
 			
+			for (int i = 0; i < etals.length; i++) {
+				if (etals[i].isEtalOccupe()) {
+					nbEtalOccupes++;
+					strMarche.append(etals[i].afficherEtal());
+				}
+			}
+			
+			int nbEtalsPasOccupes = etals.length - nbEtalOccupes;
+			
+			strMarche.append("Il reste " + nbEtalsPasOccupes + " etals non utilises dans le marche.");
+			return strMarche.toString();
 		}
 	}
 
@@ -57,11 +112,9 @@ public class Village {
 	public String afficherVillageois() {
 		StringBuilder chaine = new StringBuilder();
 		if (nbVillageois < 1) {
-			chaine.append("Il n'y a encore aucun habitant au village du chef "
-					+ chef.getNom() + ".\n");
+			chaine.append("Il n'y a encore aucun habitant au village du chef " + chef.getNom() + ".\n");
 		} else {
-			chaine.append("Au village du chef " + chef.getNom()
-					+ " vivent les légendaires gaulois :\n");
+			chaine.append("Au village du chef " + chef.getNom() + " vivent les légendaires gaulois :\n");
 			for (int i = 0; i < nbVillageois; i++) {
 				chaine.append("- " + villageois[i].getNom() + "\n");
 			}
